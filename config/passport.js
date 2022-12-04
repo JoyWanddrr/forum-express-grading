@@ -31,9 +31,7 @@ passport.deserializeUser((id, done) => {
       { model: User, as: 'Followings' },
     ]
   })
-    .then(user => {
-      done(null, user.toJSON())
-    })
+    .then(user => done(null, user.toJSON()))
     .catch(err => done(err))
 })
 
