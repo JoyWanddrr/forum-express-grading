@@ -63,7 +63,7 @@ const userController = {
   getUser: (req, res, next) => {
     const userId = req.params.id
     return Promise.all([User.findByPk(userId, { include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }, { model: Restaurant, as: 'FavoritedRestaurants' }], nest: true }),
-    Comment.findAll({ where: { userId }, include: { model: Restaurant, attributes: ['id', 'image'] }, nest: true, raw: true })])
+      Comment.findAll({ where: { userId }, include: { model: Restaurant, attributes: ['id', 'image'] }, nest: true, raw: true })])
       .then(([userProfile, comments]) => {
         if (!userProfile) throw new Error("User didn't exist!")
         userProfile = userProfile.toJSON()
@@ -101,7 +101,7 @@ const userController = {
   addFavorite: (req, res, next) => {
     const { restaurantId } = req.params
     return Promise.all([Restaurant.findByPk(restaurantId),
-    Favorite.findOne({ where: { userId: req.user.id, restaurantId } })])// 確認這個收藏的關聯是否存在？
+      Favorite.findOne({ where: { userId: req.user.id, restaurantId } })])// 確認這個收藏的關聯是否存在？
       .then(([restaurant, favorite]) => {
         if (!restaurant) throw new Error("Restaurant didn't exist!")
         if (favorite) throw new Error('You have favorited this restaurant!')
@@ -149,24 +149,24 @@ const userController = {
     return User.findAll({
       include: [{ model: User, as: 'Followers' }]
     })
-      // .then(users => { // 這裡的users是有"users的追蹤者"資料的陣列
-      //   // 整理 users 資料，把每個 user 項目都拿出來處理一次，並把新陣列儲存在 users 裡
-      //   users = users.map(user => ({
-      //     // 這裡users變數有重複使用，可以優化，但使用者這個版本的好處是節省資源空間。
-      //     ...user.toJSON(),
-      //     // 計算追蹤者人數
-      //     followerCount: user.Followers.length,
-      //     // 判斷目前登入使用者的"追蹤名單"內是否已追蹤該 user 物件(user.id)
-      //     isFollowed: req.user.Followings.some(f => f.id === user.id)
-      //   }))
-      //   users = users.sort((a, b) => b.followerCount - a.followerCount)
-      //   res.render('top-users', { users: users })
-      // })
+    // .then(users => { // 這裡的users是有"users的追蹤者"資料的陣列
+    //   // 整理 users 資料，把每個 user 項目都拿出來處理一次，並把新陣列儲存在 users 裡
+    //   users = users.map(user => ({
+    //     // 這裡users變數有重複使用，可以優化，但使用者這個版本的好處是節省資源空間。
+    //     ...user.toJSON(),
+    //     // 計算追蹤者人數
+    //     followerCount: user.Followers.length,
+    //     // 判斷目前登入使用者的"追蹤名單"內是否已追蹤該 user 物件(user.id)
+    //     isFollowed: req.user.Followings.some(f => f.id === user.id)
+    //   }))
+    //   users = users.sort((a, b) => b.followerCount - a.followerCount)
+    //   res.render('top-users', { users: users })
+    // })
 
       // 這個寫法可以保有users原始資料
       .then(users => {
         const result = users
-          .map(user => ({// 這行有延遲現象????
+          .map(user => ({ // 這行有延遲現象????
             ...user.toJSON(),
             followerCount: user.Followers.length,
             isFollowed: req.user.Followings.some(f => f.id === user.id)
