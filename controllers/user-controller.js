@@ -62,15 +62,15 @@ const userController = {
   // },
   getUser: (req, res, next) => {
     const userId = req.params.id
-    return Promise.all([User.findByPk(userId, { raw: true }),
-    Comment.findAll({ where: { userId }, include: Restaurant, nest: true, raw: true })])
+    return Promise.all([User.findByPk(userId, { include: [{ model: User, as: 'Followers' }, { model: User, as: 'Followings' }, { model: Restaurant, as: 'FavoritedRestaurants' }], nest: true }),
+    Comment.findAll({ where: { userId }, include: { model: Restaurant, attributes: ['id', 'image'] }, nest: true, raw: true })])
       .then(([userProfile, comments]) => {
         if (!userProfile) throw new Error("User didn't exist!")
+        userProfile = userProfile.toJSON()
         res.render('users/profile', { user: getUser(req), userProfile, comments })
       })
       .catch(err => next(err))
   },
-
   // 使用者檔案編輯頁面
   editUser: (req, res, next) => {
     return User.findByPk(req.params.id, { raw: true })

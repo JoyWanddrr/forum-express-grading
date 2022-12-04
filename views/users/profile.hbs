@@ -13,8 +13,11 @@
     <div class=" container-item " style=" margin:20px 0 0 100px;">
       <p class="fw-bold">{{userProfile.name}}</p>
       <p>{{userProfile.email}}</p>
-      <p>{{comments.length}} 已評論餐廳</p>
+      <p style="line-height:2px;"><span class="fw-bold">{{comments.length}}</span> 已評論餐廳</p>
       {{!-- <p>{{count}} 已評論餐廳</p> --}}
+      <p style="line-height:2px;"><span class="fw-bold">{{userProfile.FavoritedRestaurants.length}}</span> 收藏的餐廳</p>
+      <p style="line-height:2px;"><span class="fw-bold">{{userProfile.Followings.length}}</span> followings (追蹤者)</span>
+      <p style="line-height:2px;"><span class="fw-bold">{{userProfile.Followers.length}}</span> followers (追隨者)</p>
       {{#ifCond userProfile.id user.id}}
       <a href="/users/{{user.id}}/edit" class="btn btn-primary">
         edit
@@ -22,38 +25,116 @@
       {{/ifCond}}
     </div>
   </div>
-  <div class="mt-3" style="background-color: white;border: 1px solid rgb(197, 197, 197,0.6);">
-    <nav class="navbar navbar-light bg-light" style="width: 100%;">
-      <div class="container-fluid">
-        <span class="m-3 text-center">{{comments.length}} 已評論餐廳</span>
-        {{!-- <span class="m-3 text-center">{{count}} 已評論餐廳</span>--}}
-      </div>
-    </nav>
-    <div>
-      <div class="card ">
-        <div class="card-body d-flex justify-content-start flex-wrap">
-          {{!-- {{#each userComments}}
-          <div class="restaurant-icon">
-            <a href="/restaurants/{{this.restaurantId}}">
-              <img src="{{this.Restaurant.image}}" class="m-3" title="{{this.Restaurant.name}}
-                style=" width:100px;height:100px;border: 1px solid black;">
-            </a>
-          </div> --}}
-          {{!-- {{/each}} --}}
-          {{#if comments}}
-          {{#each comments}}
-          <div class="restaurant-icon">
-            <a href="/restaurants/{{this.restaurantId}}">
-              <img src="{{this.Restaurant.image}}" class="m-3" title="{{this.Restaurant.name}}"
-                style="width:100px;height:100px;border: 1px solid black;">
-            </a>
+  <div class="container d-flex">
+    <div class="container-items col-4 m-3">
+      {{!-- followings --}}
+      <div class="mt-3" style="background-color: white;border: 1px solid rgb(197, 197, 197,0.6);">
+        <nav class="navbar navbar-light bg-light" style="width: 100%;">
+          <div class="container-fluid">
+            <span class="m-3 text-center"><span class="fw-bold">{{userProfile.Followings.length}}</span> followings
+              (追蹤者)</span>
           </div>
-          {{/each}}
-          {{else}}
-          <p>請添加評論</p>
+        </nav>
+        <div>
+          <div class="card ">
+            <div class="card-body d-flex justify-content-start flex-wrap">
+              {{#each user.Followings}}
+              <div class="restaurant-icon">
+                <a href="/users/{{this.id}}">
+                  <img src="{{this.image}}" class="m-2" title="{{this.name}}"
+                    style="width:80px;height:80px;border: 1px solid black;">
+                </a>
+              </div>
+              {{/each}}
+            </div>
+          </div>
         </div>
-        {{/if}}
+      </div>
+      {{!-- followers --}}
+      <div class="mt-3" style="background-color: white;border: 1px solid rgb(197, 197, 197,0.6);">
+        <nav class="navbar navbar-light bg-light" style="width: 100%;">
+          <div class="container-fluid">
+            <span class="m-3 text-center"><span class="fw-bold">{{userProfile.Followers.length}}</span> followers
+              (追隨者)</span>
+          </div>
+        </nav>
+        <div>
+          <div class="card ">
+            <div class="card-body d-flex justify-content-start flex-wrap">
+              {{#each userProfile.Followers}}
+              <div class="restaurant-icon">
+                <a href="/users/{{this.id}}">
+                  <img src="{{this.image}}" class="m-2" title="{{this.name}}"
+                    style="width:80px;height:80px;border: 1px solid black;">
+                </a>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-items col-8 m-3">
+      {{!-- comments --}}
+      <div class="mt-3" style="background-color: white;border: 1px solid rgb(197, 197, 197,0.6);">
+        <nav class="navbar navbar-light bg-light" style="width: 100%;">
+          <div class="container-fluid">
+            <span class="m-3 text-center"><span class="fw-bold">{{comments.length}}</span> 已評論餐廳</span>
+            {{!-- <span class="m-3 text-center">{{count}} 已評論餐廳</span>--}}
+          </div>
+        </nav>
+        <div>
+          <div class="card ">
+            <div class="card-body d-flex justify-content-start flex-wrap">
+              {{!-- {{#each userComments}}
+              <div class="restaurant-icon">
+                <a href="/restaurants/{{this.restaurantId}}">
+                  <img src="{{this.Restaurant.image}}" class="m-3" title="{{this.Restaurant.name}}
+                      style=" width:100px;height:100px;border: 1px solid black;">
+                </a>
+              </div> --}}
+              {{!-- {{/each}} --}}
+              {{#if comments}}
+              {{#each comments}}
+              <div class="restaurant-icon">
+                <a href="/restaurants/{{this.restaurantId}}">
+                  <img src="{{this.Restaurant.image}}" class="m-2" title="{{this.Restaurant.name}}"
+                    style="width:80px;height:80px;border: 1px solid black;">
+                </a>
+              </div>
+              {{/each}}
+              {{else}}
+              <p>請添加評論</p>
+            </div>
+            {{/if}}
+          </div>
+        </div>
+      </div>
+      {{!-- favorited --}}
+      <div class="mt-3" style="background-color: white;border: 1px solid rgb(197, 197, 197,0.6);">
+        <nav class="navbar navbar-light bg-light" style="width: 100%;">
+          <div class="container-fluid">
+            <span class="m-3 text-center"><span class="fw-bold">{{userProfile.FavoritedRestaurants.length}}</span>
+              收藏的餐廳</span>
+          </div>
+        </nav>
+        <div>
+          <div class="card ">
+            <div class="card-body d-flex justify-content-start flex-wrap">
+              {{#each userProfile.FavoritedRestaurants}}
+              <div class="restaurant-icon">
+                <a href="/restaurants/{{this.id}}">
+                  <img src="{{this.image}}" class="m-2" title="{{this.name}}"
+                    style="width:80px;height:80px;border: 1px solid black;">
+                </a>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+
+
 </div>
